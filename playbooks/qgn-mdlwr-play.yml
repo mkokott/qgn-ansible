@@ -1,0 +1,25 @@
+---
+- name: provision server for VA creation
+  hosts: centos6-server
+  sudo: True
+  vars:
+    source_packages: ../packages/*
+    jre8_package: jre-8u60-linux-x64.rpm
+    target_temp: /tmp/ansible-tmp
+  tasks:
+    - name: create temp dir
+      file: >
+        path={{ target_temp }}
+        state=directory
+        mode=0755
+    - name: copy packages and configuration files to temp dir
+      copy: >
+        src={{ item }}
+        dest={{ target_temp }}
+      with_fileglob: {{ source_packages}}
+    # install and configure JRE 8 
+    - name: install JRE 8
+      yum: >
+        #src={{ jre8_package }}
+        #dest=
+
