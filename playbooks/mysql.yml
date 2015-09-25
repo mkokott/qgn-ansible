@@ -1,0 +1,15 @@
+---
+- name: install mysql
+  hosts: testserver
+  sudo: True
+  tasks:
+    # centos 7 uses mariadb by default so mysql-server repository must be added to yum in order to replace it
+    - name: add mysql repository to yum
+      yum: >
+        name=http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm
+        state=present
+    - name: install mysql-server
+      yum: >
+        name=mysql-server
+        state=present
+
