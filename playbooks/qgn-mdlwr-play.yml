@@ -16,10 +16,8 @@
       copy: >
         src={{ item }}
         dest={{ target_temp }}
-      with_fileglob: {{ source_packages}}
-    # install and configure JRE 8 
+      with_fileglob: source_packages
     - name: install JRE 8
-      yum: >
-        #src={{ jre8_package }}
-        #dest=
-
+      yum: name={{ target_temp }}/{{ jre8_package }} state=present 
+    - name: install Tomcat 6
+      yum: name=tomcat6 state=present

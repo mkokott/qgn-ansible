@@ -1,2 +1,2 @@
 testserver ansible_ssh_host=10.0.0.79
-centos6-server ansible_ssh_host=10.0.0.184 
+centos6-server ansible_ssh_host=10.0.0.184
