@@ -1,10 +1,12 @@
 ---
-- name: provision server for VA creation
+- name: provisioning of virtual machine for VA creation
   hosts: centos6-server
   sudo: True
   vars:
     source_packages: ../packages/*
-    jre8_package: jre-8u60-linux-x64.rpm
+    jre_package: jre.rpm
+    mariadb_server_package: mariadb-server.rpm
+    tomcat_package: tomcat.tar.gz
     target_temp: /tmp/ansible-tmp
   tasks:
     - name: create temp dir
@@ -18,6 +20,19 @@
         dest={{ target_temp }}
       with_fileglob: source_packages
     - name: install JRE 8
-      yum: name={{ target_temp }}/{{ jre8_package }} state=present 
-    - name: install Tomcat 6
-      yum: name=tomcat6 state=present
+      yum: >
+        name={{ target_temp }}/{{ jre_package }} 
+        state=present 
+    - name: install Tomcat 7
+      unarchive: >
+        src={{ target_temp }}/{{ tomcat_package }}
+        dest=/usr/local/tomcat7
+        copy=no
+    - name: install MariaDB 10
+      yum: >
+        name={{ target_temp }}/{{ mariadb_server_package }}
+        state=present
+    - name: remove temp dir
+      file: >
+        path={{ target_temp }}
+        state=absent

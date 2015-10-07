@@ -5,22 +5,22 @@
       "boot_command": [
         "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
       ],
-      "boot_wait": "20s",
+      "boot_wait": "10s",
       "disk_size": 8920,
       "guest_os_type": "RedHat_64",
-      "headless": true,
+      "headless": false,
       "http_directory": "kickstart",
       "iso_urls": [
-        "/data/packages/centos/CentOS-6.7-x86_64-LiveDVD.iso",
-        "http://centos.crazyfrogs.org/6.7/isos/x86_64/CentOS-6.7-x86_64-LiveDVD.iso"
+        "../os/CentOS-6.7-x86_64-bin-DVD1.iso",
+        "http://ftp.hosteurope.de/mirror/centos.org/6.7/isos/x86_64/CentOS-6.7-x86_64-bin-DVD1.iso"
       ],
       "iso_checksum_type": "md5",
-      "iso_checksum": "10745b3aa580742fd1cc72488eca0ebd",
+      "iso_checksum": "51f90e8ddd2ea199780065eaf75130ad",
       "ssh_username": "root",
-      "ssh_password": "centos",
-      "ssh_port": 22,
+      "ssh_password": "#centos!",
+      "ssh_port": 10022,
       "ssh_wait_timeout": "10000s",
-      "shutdown_command": "echo 'vagrant'|sudo -S /sbin/halt -h -p",
+      "shutdown_command": "/sbin/halt -h -p",
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "virtualbox_version_file": ".vbox_version",
       "vm_name": "packer-centos-6.7-x86_64",
@@ -40,8 +40,14 @@
         [
           "modifyvm",
           "{{.Name}}",
-          "--longmode",
-          "off"
+          "--nic1",
+          "nat"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--natpf1",
+          "guestssh,tcp,127.0.0.1,10022,,22"
         ]
       ]
     }
