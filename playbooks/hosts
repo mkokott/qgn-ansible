@@ -1,2 +1,3 @@
+ansible-local ansible_ssh_host=127.0.0.1
 virtualbox ansible_ssh_host=127.0.0.1 ansible_ssh_port=10022
 centos6-server ansible_ssh_host=10.0.0.184

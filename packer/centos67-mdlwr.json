@@ -1,4 +1,13 @@
 {
+  "variables": {
+    "os-iso-local": "../os/centos_6.7_x86_64/CentOS-6.7-x86_64-bin-DVD1.iso",
+    "os-iso-remote": "http://ftp.hosteurope.de/mirror/centos.org/6.7/isos/x86_64/CentOS-6.7-x86_64-bin-DVD1.iso",
+    "os-iso-md5": "51f90e8ddd2ea199780065eaf75130ad",
+    "ssh_username": "root",
+    "ssh_password": "#centos!",
+    "ovf_name": "packer-centos-6.7-x86_64",
+    "ovf_version": "1.0-SNAPSHOT"
+  },
   "builders": [
     {
       "type": "virtualbox-iso",
@@ -11,21 +20,21 @@
       "headless": false,
       "http_directory": "kickstart",
       "iso_urls": [
-        "../os/centos_6.7_x86_64/CentOS-6.7-x86_64-bin-DVD1.iso",
-        "http://ftp.hosteurope.de/mirror/centos.org/6.7/isos/x86_64/CentOS-6.7-x86_64-bin-DVD1.iso"
+        "{{user `os-iso-local`}}",
+        "{{user `os-iso-remote`}}"
       ],
       "iso_checksum_type": "md5",
-      "iso_checksum": "51f90e8ddd2ea199780065eaf75130ad",
-      "ssh_username": "root",
-      "ssh_password": "#centos!",
+      "iso_checksum": "{{user `os-iso-md5`}}",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
       "ssh_port": 10022,
       "ssh_skip_nat_mapping": true,
       "ssh_wait_timeout": "20m",
       "shutdown_command": "/sbin/halt -h -p",
-      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "guest_additions_mode": "disable",
       "virtualbox_version_file": ".vbox_version",
       "output_directory": "../output",
-      "vm_name": "packer-centos-6.7-x86_64",
+      "vm_name": "{{user `ovf_name`}}-{{user `ovf_version`}}",
       "vboxmanage": [
         [
           "modifyvm",
@@ -61,16 +70,15 @@
     },
     {
       "type": "file",
-      "source": "../packages",
+      "source": "../packages/",
       "destination": "/tmp/packages"
     },
     {
       "type": "ansible-local",
-      "playbook_file": "../playbooks/ansible-local-play.yml"
-    },
-    {
-      "type": "shell",
-      "scripts": [ "../scripts/cleanup-after-provisioning.sh" ]
+      "playbook_dir": "../playbooks",
+      "playbook_file": "../playbooks/ansible-local-play.yml",
+      "inventory_file": "../playbooks/hosts",
+      "staging_directory": "/tmp/ansible"
     }
   ]
 }
