@@ -1,0 +1,47 @@
+---
+- name: configuration of MariaDB
+  hosts: ansible-local
+  sudo: True
+  vars_files:
+    - variables.yml
+  vars:
+    root_user: root
+    root_password: #mysql!
+    db_user: genohm
+    db_password: genohm
+    db_table: qiagen
+  tasks:
+    - name: installing python-mysql package used by ansible
+      yum: >
+        name=MySQL-python
+        state=present
+    - name: setting initial root password
+      mysql_user: >
+        name={{ root_user }}
+        password={{ root_password }}
+        login_user={{ root_user }}
+        login_password=""
+    - name: removing anonymous access
+      mysql_user: >
+        name=""
+        state=absent
+        login_user={{ root_user }}
+        login_password={{ root_password }}
+    - name: creating database 'qiagen'
+      mysql_db: >
+        name={{ db_table }}
+        state=present
+        login_user={{ root_user }}
+        login_password={{ root_password }}
+    - name: creating user 'genohm'
+      mysql_user: >
+        name={{ db_user }}
+        host=localhost
+        password={{ db_password }}
+        priv=qiagen.*:ALL
+        login_user={{ root_user }}
+        login_password={{ root_password }}
+    - name: removing python-mysql package used by ansible
+      yum: >
+        name=MySQL-python
+        state=absent
