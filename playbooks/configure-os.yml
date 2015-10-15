@@ -13,6 +13,7 @@
       file: >
         path=/opt/tomcat
         state=directory
+        recurse=yes
         owner=tomcat
         group=tomcat
         mode=0755
@@ -20,6 +21,7 @@
       file: >
         path=/var/run/tomcat
         state=directory
+        recurse=yes
         owner=tomcat
         group=tomcat
         mode=0755
@@ -29,7 +31,7 @@
     - name: adding rule to iptables for 'HTTP' (2/2)
       shell: >
         iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT
-    - name: saving firewall rules
+    - name: saving firewall rules of iptables
       shell: >
         service iptables save
     - name: restarting iptables service
