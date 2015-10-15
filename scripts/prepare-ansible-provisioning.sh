@@ -1,6 +1,6 @@
 #! /bin/bash
 
-PACKAGES_DIR=/tmp/packages
+TMP_DIRS=(/tmp/packages /tmp/conf)
 PROVISION_HOME=/tmp/ansible
 
 # creating ansible user with home directory /tmp/ansible
@@ -24,8 +24,9 @@ su - ansible -c "chmod 700 /tmp/ansible/.ssh/authorized_keys"
 
 
 # creating $PACKAGES_DIR to upload rpms and tar balls to
-if [ -d $PACKAGES_DIR ]; then
-    
-    rm -rf $PACKAGES_DIR
-fi
-mkdir $PACKAGES_DIR
+for _DIR in ${TMP_DIRS[@]}; do
+    if [ -d $_DIR ]; then
+        rm -rf $_DIR
+    fi
+    mkdir $_DIR
+done

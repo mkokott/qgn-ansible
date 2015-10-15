@@ -1,0 +1,18 @@
+---
+- name: installation and configuration of JRE
+  hosts: ansible-local
+  sudo: True
+  vars_files:
+    - variables.yml
+  tasks:
+    - name: installing JRE
+      yum: >
+        name={{ packages_dir }}/{{ jre_package }} 
+        state=present
+    - name: setting JAVA_HOME to latest JRE & resetting PATH to include JAVA_HOME
+      copy: >
+        src=../conf/os/java.sh 
+        dest=/etc/profile.d/java.sh 
+        owner=root 
+        group=root 
+        mode=644

@@ -1,0 +1,43 @@
+---
+- name: configuration of users and directories
+  hosts: ansible-local
+  sudo: True
+  vars_files:
+    - variables.yml
+  tasks:
+    - name: creating user 'tomcat'
+      user: >
+        name=tomcat
+        state=present
+    - name: changing ownership of tomcat directory '/opt/tomcat' (1/2)
+      file: >
+        path=/opt/tomcat
+        state=directory
+        owner=tomcat
+        group=tomcat
+        mode=0755
+    - name: changing ownership of tomcat directory '/var/run/tomcat' (2/2)
+      file: >
+        path=/var/run/tomcat
+        state=directory
+        owner=tomcat
+        group=tomcat
+        mode=0755
+    - name: adding rule to iptables for 'HL7' (1/2)
+      shell: >
+        iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 2575 -j  ACCEPT
+    - name: adding rule to iptables for 'HTTP' (2/2)
+      shell: >
+        iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT
+    - name: saving firewall rules
+      shell: >
+        service iptables save
+    - name: restarting iptables service
+      service: >
+        name=iptables
+        state=restarted
+    - name: creating directory '/media/genereadershare'
+      file: >
+        path=/media/genereadershare
+        state=directory
+        mode=0777

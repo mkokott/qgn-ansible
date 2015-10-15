@@ -1,0 +1,22 @@
+---
+- name: installation of httpd
+  hosts: ansible-local
+  sudo: True
+  vars_files:
+    - variables.yml
+  tasks:
+    - name: installing httpd
+      yum: >
+        name=httpd
+        state=present
+    - name: deploying 'virtualhosts.conf'
+      copy: >
+        src=../conf/httpd/virtualhosts.conf
+        dest=/etc/httpd/conf.d/virtualhosts.conf
+        owner=root
+        group=root
+        mode=644
+    - name: setting runlevel of httpd service to auto-start
+      service: >
+        name=httpd
+        enabled=yes

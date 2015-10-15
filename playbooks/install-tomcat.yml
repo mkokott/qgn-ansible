@@ -1,0 +1,59 @@
+---
+- name: installation of Tomcat
+  hosts: ansible-local
+  sudo: True
+  vars_files:
+    - variables.yml
+  vars:
+    tomcat_temp_dir: /tmp/packages/tomcat-temp
+  tasks:
+    - name: creating temporary directory to extract Tomcat
+      file: >
+        path={{ tomcat_temp_dir }}
+        state=directory
+        mode=0755
+    - name: unpacking Tomcat to temporary directory
+      unarchive: >
+        src={{ packages_dir }}/{{ tomcat_package }}
+        dest={{ tomcat_temp_dir }}
+        copy=no
+    - name: getting Tomcat directory
+      shell: >
+        ls {{ tomcat_temp_dir }}
+      register: tomcat_dir
+    - name: moving Tomcat to '/opt/tomcat'
+      command: >
+        mv {{ tomcat_temp_dir }}/{{ item }} /opt/tomcat
+      with_items: tomcat_dir.stdout_lines
+    - name: deploying Tomcat startup script 'tomcatd' (1/2)
+      copy: >
+        src=../conf/tomcat/tomcatd
+        dest=/etc/init.d/tomcatd
+        owner=root
+        group=root
+        mode=755
+    - name: deploying Tomcat startup script 'tomcatRunner' (2/2)
+      copy: >
+        src=../conf/tomcat/tomcatRunner
+        dest=/etc/init.d/tomcatRunner
+        owner=root
+        group=root
+        mode=755
+    - name: deploying Tomcat configuration 'context.xml' (1/2)
+      copy: >
+        src=../conf/tomcat/context.xml
+        dest=/opt/tomcat/conf/context.xml
+        owner=root
+        group=root
+        mode=644
+    - name: deploying Tomcat configuration 'server.xml' (2/2)
+      copy: >
+        src=../conf/tomcat/server.xml
+        dest=/opt/tomcat/conf/server.xml
+        owner=root
+        group=root
+        mode=644
+    - name: setting runlevel of Tomcat service to auto-start
+      service: >
+        name=tomcatd
+        enabled=yes

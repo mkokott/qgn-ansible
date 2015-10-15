@@ -1,0 +1,19 @@
+---
+- name: installation of httpd
+  hosts: ansible-local
+  sudo: True
+  vars_files:
+    - variables.yml
+  tasks:
+    - name: installing samba-client
+      yum: >
+        name=samba-client
+        state=present
+    - name: installing samba-common
+      yum: >
+        name=samba-common
+        state=present
+    - name: installing cifs-utils
+      yum: >
+        name=cifs-utils
+        state=present

@@ -1,12 +1,12 @@
 #! /bin/bash
 
-PACKAGES_DIR=/tmp/packages
-
-# remove temporary directory for rpms and tar balls
-if [ -d $PACKAGES_DIR ]; then
-    
-    rm -rf $PACKAGES_DIR
-fi
+# remove all temporary directories
+TMP_DIRS=(/tmp/packages /tmp/conf)
+for _DIR in ${TMP_DIRS[@]}; do
+    if [ -d $_DIR ]; then
+        rm -rf $_DIR
+    fi
+done
 
 # remove ansible installation
 yum -y erase ansible

@@ -1,0 +1,32 @@
+---
+- name: installation of MariaDB
+  hosts: ansible-local
+  sudo: True
+  vars_files:
+    - variables.yml
+  vars:
+    mariadb_repo_file: ../conf/os/MariaDB.repo
+    mariadb_conf_file: ../conf/mysql/my.conf
+  tasks:
+    - name: adding MariaDB repository to known packages repositories
+      copy: >
+        src={{ mariadb_repo_file }}
+        dest=/etc/yum.repos.d/MariaDB.repo 
+        owner=root
+        group=root
+        mode=0644
+    - name: installing MariaDB-server
+      yum: >
+        name=MariaDB-server
+        state=present
+    - name: deploying MySQL configuration file
+      copy: >
+        src={{ mariadb_conf_file }}
+        dest=/etc/my.conf
+        owner=root
+        group=root
+        mode=0644
+    - name: setting runlevel of MySQL service to auto-start
+      service: >
+        name=mysql
+        enabled=yes
