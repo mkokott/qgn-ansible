@@ -1,0 +1,14 @@
+---
+- name: deploy middleware web app to 
+  hosts: ansible-local
+  sudo: True
+  vars_files:
+    - variables.yml
+  tasks:
+    - name: copy middleware war archive to tomcat webapps folder
+      copy: >
+        src=../packages/middleware.war
+        dest=/opt/tomcat/webapps
+        owner=tomcat
+        group=tomcat
+        mode=644
