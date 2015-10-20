@@ -129,6 +129,13 @@
       "staging_directory": "/tmp/ansible"
     },
     {
+      "type": "ansible-local",
+      "playbook_dir": "../playbooks",
+      "playbook_file": "../playbooks/prepare-system-for-capturing.yml",
+      "inventory_file": "../playbooks/hosts",
+      "staging_directory": "/tmp/ansible"
+    },
+    {
       "type": "shell",
       "scripts": [ "../scripts/cleanup-after-provisioning.sh" ]
     }

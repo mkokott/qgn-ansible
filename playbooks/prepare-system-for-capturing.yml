@@ -1,0 +1,11 @@
+---
+- name: preparation of operating system configuration for capturing the image
+  hosts: ansible-local
+  sudo: True
+  vars_files:
+    - variables.yml
+  tasks:
+    - name: deleting MAC-address specific NIC configuration
+      file: >
+        path=/etc/udev/rules.d/70-persistent-net.rules
+        state=absent
