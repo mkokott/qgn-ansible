@@ -5,7 +5,12 @@
   vars_files:
     - variables.yml
   tasks:
-    - name: deleting MAC-address specific NIC configuration
+    - name: deleting MAC-address specific NIC configuration (1/2)
       file: >
         path=/etc/udev/rules.d/70-persistent-net.rules
+        state=absent
+  tasks:
+    - name: deleting MAC-address specific NIC configuration (2/2)
+      file: >
+        path=/etc/sysconfig/network-scripts/ifcfg-eth0
         state=absent
