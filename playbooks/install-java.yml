@@ -16,3 +16,8 @@
         owner=root 
         group=root 
         mode=644
+    - name: updating symlink '/usr/bin/java'
+      file: >
+        src=/usr/java/latest/bin/java
+        path=/usr/bin/java
+        

@@ -6,12 +6,17 @@
     - variables.yml
   tasks:
     - name: deleting MAC-address specific eth0 NIC configuration (1/2)
-      lineinfile: >
-        dest=/etc/sysconfig/network-scripts/ifcfg-eth0
-        regexp="^(MACADDR|HWADDR).*$"
+      file: >
+        path=/etc/sysconfig/network-scripts/ifcfg-eth0
         state=absent
-  tasks:
     - name: deleting MAC-address specific eth0 NIC configuration (2/2)
       file: >
         path=/etc/udev/rules.d/70-persistent-net.rules
         state=absent
+    - name: creating network-script 'ifcfg-eth0'
+      copy: >
+        src=../conf/os/ifcfg-eth0
+        dest=/etc/sysconfig/network-scripts/ifcfg-eth0
+        owner=root
+        group=root
+        mode=644
