@@ -15,6 +15,10 @@
       yum: >
         name=MySQL-python
         state=present
+    - name: starting MariaDB service
+      service:
+        name=mysql
+        state=started
     - name: setting initial root password
       mysql_user: >
         name={{ root_user }}
