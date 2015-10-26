@@ -6,7 +6,7 @@
     - variables.yml
   vars:
     mariadb_repo_file: ../conf/os/MariaDB.repo
-    mariadb_conf_file: ../conf/mysql/my.conf
+    mariadb_conf_file: ../conf/mysql/my.cnf
   tasks:
     - name: adding MariaDB repository to known packages repositories
       copy: >
@@ -22,7 +22,7 @@
     - name: deploying MySQL configuration file
       copy: >
         src={{ mariadb_conf_file }}
-        dest=/etc/my.conf
+        dest=/etc/my.cnf
         owner=root
         group=root
         mode=0644
