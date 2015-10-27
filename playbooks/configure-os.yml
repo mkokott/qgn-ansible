@@ -25,6 +25,13 @@
         owner=tomcat
         group=tomcat
         mode=0755
+    - name: creating repository folder '/var/genereadlink/repository'
+      file: >
+        path=/var/genereadlink/repository
+        state=directory
+        owner=tomcat
+        group=tomcat
+        mode=0755
     - name: adding rule to iptables for 'HL7' (1/2)
       shell: >
         iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 2575 -j  ACCEPT
