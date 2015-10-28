@@ -1,0 +1,45 @@
+---
+- name: Configuration of Samba server
+  hosts: ansible-local
+  sudo: True
+  vars_files:
+    - variables.yml
+  vars:
+    workgroup: WORKGROUP
+    share_name: public
+    share_path: /public
+    samba_group: smbusers
+    samba_users:
+      - {name: 'smbuser', password: 'smbuser'}
+  tasks:
+    - name: Deploying Samba config
+      template: src=../conf/samba/smb.conf.j2 dest=/etc/samba/smb.conf backup=yes
+
+    - name: Restart Samba
+      service: name=smb state=restarted
+
+    - name: Creating group for Samba users
+      group: name={{ samba_group }} state=present
+
+    - name: Creating Linux user(s) and assigning them to the Samba group
+      user: name={{ item.name }} groups={{ samba_group }} append=yes
+      with_items:
+        samba_users
+
+    - name: Adding users to Samba 
+      shell: (echo {{ item.password }}; echo {{ item.password}}) | smbpasswd -s -a {{ item.name }}
+      with_items:
+        samba_users
+
+    # - name: Checking if shared folder exists
+    #   command: /usr/bin/test -e {{ share_path }}
+    #   register: share_path_exists
+    #   ignore_errors: True
+    # when: share_path_exists.rc != 0
+
+    - name: Creating shared folder
+      file: state=directory path={{ share_path }} owner=root group={{ samba_group }} mode=1770
+
+  # handlers:
+  #   - name: restart samba
+  #     service: name=smbd state=restarted
