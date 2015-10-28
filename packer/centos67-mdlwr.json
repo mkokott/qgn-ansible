@@ -150,8 +150,7 @@
   "post-processors": [
     {
       "type": "compress",
-      "format": "tar.gz",
-      "compression": 9
+      "compression_level": 9
     }
   ]
 }
