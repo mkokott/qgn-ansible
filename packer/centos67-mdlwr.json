@@ -146,6 +146,13 @@
       "type": "shell",
       "scripts": [ "../scripts/cleanup-after-provisioning.sh" ]
     }
+  ],
+  "post-processors": [
+    {
+      "type": "compress",
+      "format": "tar.gz",
+      "compression": 9
+    }
   ]
 }
 
