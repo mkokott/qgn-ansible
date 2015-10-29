@@ -158,7 +158,7 @@
   "post-processors": [
     {
       "type": "compress",
-      "output": "{{user `ovf_out_dir`}}/genereadlink_{{user `ovf_version`}}_{{timestamp}}.zip"
+      "output": "{{user `ovf_out_dir`}}/genereadlink_{{user `ovf_version`}}_{{timestamp}}.zip",
       "compression_level": 9
     }
   ]
