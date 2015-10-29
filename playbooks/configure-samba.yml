@@ -7,7 +7,7 @@
   vars:
     workgroup: WORKGROUP
     share_name: public
-    share_path: /public
+    share_path: /etc/samba/share
     samba_group: smbusers
     samba_users:
       - {name: 'smbuser', password: 'smbuser'}
@@ -31,15 +31,8 @@
       with_items:
         samba_users
 
-    # - name: Checking if shared folder exists
-    #   command: /usr/bin/test -e {{ share_path }}
-    #   register: share_path_exists
-    #   ignore_errors: True
-    # when: share_path_exists.rc != 0
-
     - name: Creating shared folder
-      file: state=directory path={{ share_path }} owner=root group={{ samba_group }} mode=1770
+      file: state=directory path={{ share_path }} owner=root group={{ samba_group }} mode=0770
 
-  # handlers:
-  #   - name: restart samba
-  #     service: name=smbd state=restarted
+    - name: Adding Samba service to autostart
+      service: name=smb enabled=yes
