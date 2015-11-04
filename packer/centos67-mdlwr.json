@@ -118,6 +118,13 @@
     {
       "type": "ansible-local",
       "playbook_dir": "../playbooks",
+      "playbook_file": "../playbooks/configure-samba.yml",
+      "inventory_file": "../playbooks/hosts",
+      "staging_directory": "/tmp/ansible"
+    },
+    {
+      "type": "ansible-local",
+      "playbook_dir": "../playbooks",
       "playbook_file": "../playbooks/configure-os.yml",
       "inventory_file": "../playbooks/hosts",
       "staging_directory": "/tmp/ansible"
@@ -126,13 +133,6 @@
       "type": "ansible-local",
       "playbook_dir": "../playbooks",
       "playbook_file": "../playbooks/configure-mysql.yml",
-      "inventory_file": "../playbooks/hosts",
-      "staging_directory": "/tmp/ansible"
-    },
-    {
-      "type": "ansible-local",
-      "playbook_dir": "../playbooks",
-      "playbook_file": "../playbooks/configure-samba.yml",
       "inventory_file": "../playbooks/hosts",
       "staging_directory": "/tmp/ansible"
     },

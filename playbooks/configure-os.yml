@@ -50,3 +50,7 @@
         path=/media/genereadershare
         state=directory
         mode=0777
+    - name: locking users
+      shell: passwd -l {{ item }}
+      with_items:
+        no_login_users

@@ -2,3 +2,6 @@ source_packages: ../packages/*
 jre_package: jre.rpm
 tomcat_package: tomcat.tar.gz
 packages_dir: /tmp/packages
+no_login_users: 
+  - smbuser
+  - tomcat
